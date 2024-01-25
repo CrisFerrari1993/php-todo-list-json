@@ -53,8 +53,10 @@ export default {
         list-style: none;
         display: flex ;
         justify-content: space-between;
+        cursor: pointer;
     }
     .strikeout{
         text-decoration: line-through;
+        color: grey;
     }
 </style>
