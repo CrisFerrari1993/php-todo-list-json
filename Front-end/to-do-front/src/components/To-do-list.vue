@@ -18,7 +18,7 @@ export default {
              }).catch(err => console.error(err));
     },
     methods: {
-        togglePurchased(todo){
+        toggleDone(todo){
             todo.done = !todo.done;
         },
         deleteItem(todo){
@@ -38,19 +38,27 @@ export default {
             Great Job, everything is done &#128526;
         </h1>
         <input @keyup.enter="addItem" type="text" v-model="newItem">
-        <button @click="addItem">Add Task</button>
+        <button 
+            @click="addItem"
+            :disabled="newItem.length === 0">
+             Add Task
+        </button>
     </div>
     <div v-else>
         <h1> ToDo list : {{ todos.length }}</h1>
         <input @keyup.enter="addItem" type="text" v-model="newItem">
-        <button @click="addItem">Add Task</button>
+        <button 
+            @click="addItem"
+            :disabled="newItem.length === 0">
+                Add Task
+        </button>
         <ul>
             <li
                 v-for="(todo, index) in todos" :key="index"
 
             >
                 <span 
-                @click="togglePurchased(todo)"
+                @click="toggleDone(todo)"
                 :class="[
                 {strikeout: todo.done}
                 ]">{{ todo.task }}</span> <i @click="deleteItem(index)" class="fa-solid fa-delete-left"></i>
