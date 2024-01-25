@@ -5,7 +5,9 @@ export default {
     name : 'To-do-list',
     data(){
         return {
-            todos: []
+            todos: [],
+            newItem: "",
+            editing: false,
         }
     },
     mounted() {
@@ -21,33 +23,45 @@ export default {
         },
         deleteItem(todo){
             this.todos.splice(todo, 1);
-        }
+        },
+        addItem(){
+            this.todos.push({'task' : this.newItem});
+            this.newItem = '';
+        },
     },
 }
 </script>
 
 <template>
-<h1 v-if="todos.length == 0">
-    Great Job, everything is done &#128526;
-</h1>
-<h1 v-else>ToDo List: {{ todos.length }} </h1>
-<ul>
-    <li
-        v-for="(todo, index) in todos" :key="index"
-            
-    >
-        <span 
-        @click="togglePurchased(todo)"
-        :class="[
-        {strikeout: todo.done}
-        ]">{{ todo.task }}</span> <i @click="deleteItem(index)" class="fa-solid fa-delete-left"></i>
-    </li>
-</ul>
+    <div v-if="todos.length == 0">
+        <h1>
+            Great Job, everything is done &#128526;
+        </h1>
+        <input @keyup.enter="addItem" type="text" v-model="newItem">
+        <button @click="addItem">Add Task</button>
+    </div>
+    <div v-else>
+        <h1> ToDo list : {{ todos.length }}</h1>
+        <input @keyup.enter="addItem" type="text" v-model="newItem">
+        <button @click="addItem">Add Task</button>
+        <ul>
+            <li
+                v-for="(todo, index) in todos" :key="index"
+
+            >
+                <span 
+                @click="togglePurchased(todo)"
+                :class="[
+                {strikeout: todo.done}
+                ]">{{ todo.task }}</span> <i @click="deleteItem(index)" class="fa-solid fa-delete-left"></i>
+            </li>
+        </ul>
+    </div>
 </template>
 
 <style>
     ul{
-        margin: 0;
+        margin: 2rem 0;
         padding: 0;
     }
     li{
