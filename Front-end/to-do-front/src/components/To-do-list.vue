@@ -38,7 +38,7 @@ export default {
     >
         <span :class="[
             {strikeout: todo.done}
-        ]">{{ todo.task }}</span> <i @click="deleteItem(todo)" class="fa-solid fa-delete-left"></i>
+        ]">{{ todo.task }}</span> <i @click="deleteItem(index)" class="fa-solid fa-delete-left"></i>
     </li>
 </ul>
 </template>
