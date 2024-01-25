@@ -34,10 +34,12 @@ export default {
 <ul>
     <li
         v-for="(todo, index) in todos" :key="index"
-        @click="togglePurchased(todo)"    
+            
     >
-        <span :class="[
-            {strikeout: todo.done}
+        <span 
+        @click="togglePurchased(todo)"
+        :class="[
+        {strikeout: todo.done}
         ]">{{ todo.task }}</span> <i @click="deleteItem(index)" class="fa-solid fa-delete-left"></i>
     </li>
 </ul>
@@ -57,6 +59,6 @@ export default {
     }
     .strikeout{
         text-decoration: line-through;
-        color: grey;
+        color: gray;
     }
 </style>
