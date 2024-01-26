@@ -3,11 +3,10 @@ import axios from 'axios';
 
 export default {
     name : 'To-do-list',
-    data(){
+data(){
         return {
             todos: [],
             newItem: "",
-            editing: false,
         }
     },
     mounted() {
@@ -15,45 +14,60 @@ export default {
         axios.get('http://localhost/todoApi.php')
              .then(res => {
                 t.todos = res.data;
-             }).catch(err => console.error(err));
+             }).catch(err => console.log(err));
     },
     methods: {
+        addItem(){
+
+            const t = this;
+            const params = {
+                text : this.newItem,
+            };
+            const config = {
+                headers: {
+                    'Content-Type': 'multipart/form-data'
+                }
+            };
+            axios.post('http://localhost/addItem.php', params, config)
+                 .then(res => {
+                    t.todos = res.data;
+                    t.newItem = "";
+                 }).catch(err => console.log(err));
+        },
+        deleteItem(index){
+            
+            const t = this;
+            const params = {
+                params: {
+                    index : index
+                }
+            };
+            axios.get('http://localhost/deleteItem.php', params)
+            .then(res => {
+                t.todos = res.data;
+            }).catch(err => console.log(err));
+        },
         toggleDone(todo){
             todo.done = !todo.done;
-        },
-        deleteItem(todo){
-            this.todos.splice(todo, 1);
-        },
-        addItem(){
-            this.todos.push({'task' : this.newItem});
-            this.newItem = '';
-        },
+        }
     },
 }
 </script>
 
 <template>
-    <div v-if="todos.length == 0">
-        <h1>
-            Great Job, everything is done &#128526;
-        </h1>
-        <input @keyup.enter="addItem" type="text" v-model="newItem">
-        <button 
-            @click="addItem"
-            :disabled="newItem.length === 0">
-             Add Task
-        </button>
-    </div>
-    <div v-else>
-        <h1> ToDo list : {{ todos.length }}</h1>
-        <form>
-            <input type="text" v-model="newItem">
-            <button 
+    <div>
+        <h1  v-if="todos.length > 0"> ToDo list : {{ todos.length }}</h1>
+        <div v-else>
+            <h1>Great job! Everything is done &#128526;</h1>
+            <span>Add to list somethings you wants to do</span>
+        </div>
+        <form @submit.prevent="addItem">
+            <input type="text" name="text" v-model="newItem">
+            <input
                 type="submit"
-                @click="addItem"
-                :disabled="newItem.length === 0">
-                    Add Task
-            </button>
+                :disabled="newItem.length === 0"
+                value="Add Task">
+            <br>
         </form>
         <ul>
             <li
@@ -64,13 +78,19 @@ export default {
                 @click="toggleDone(todo)"
                 :class="[
                 {strikeout: todo.done}
-                ]">{{ todo.task }}</span> <i @click="deleteItem(index)" class="fa-solid fa-delete-left"></i>
+                ]">
+                        {{ todo.task }}
+                </span>
+                <button @click="deleteItem(index)"><i class="fa-regular fa-trash-can"></i></button>
             </li>
         </ul>
     </div>
 </template>
 
 <style>
+input{
+    margin-top: 2rem;
+}
     ul{
         margin: 2rem 0;
         padding: 0;
