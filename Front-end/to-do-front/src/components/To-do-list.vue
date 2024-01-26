@@ -46,12 +46,15 @@ export default {
     </div>
     <div v-else>
         <h1> ToDo list : {{ todos.length }}</h1>
-        <input @keyup.enter="addItem" type="text" v-model="newItem">
-        <button 
-            @click="addItem"
-            :disabled="newItem.length === 0">
-                Add Task
-        </button>
+        <form>
+            <input type="text" v-model="newItem">
+            <button 
+                type="submit"
+                @click="addItem"
+                :disabled="newItem.length === 0">
+                    Add Task
+            </button>
+        </form>
         <ul>
             <li
                 v-for="(todo, index) in todos" :key="index"
